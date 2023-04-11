@@ -1,4 +1,4 @@
-const { create } = require("../service/comment.service");
+const { create, remove } = require("../service/comment.service");
 
 class CommentController {
   async create(ctx, next) {
@@ -18,6 +18,15 @@ class CommentController {
     ctx.body = {
       code: 0,
       message: "回复评论成功",
+      data,
+    };
+  }
+  async remove(ctx, next) {
+    const commentId = ctx.params.commentId;
+    const data = await remove(commentId);
+    ctx.body = {
+      code: 0,
+      message: "评论删除成功",
       data,
     };
   }

@@ -13,6 +13,13 @@ class CommentService {
 
     return result;
   }
+
+  async remove(commentId) {
+    const statement = "DELETE FROM `comment` WHERE id = ?;";
+    const [result] = await pool.execute(statement, [commentId]);
+
+    return result;
+  }
 }
 
 module.exports = new CommentService();
