@@ -17,9 +17,11 @@ class MomentService {
     return result;
   }
   async detail(momentId) {
-    const statement = `SELECT m.id id, m.content content, JSON_OBJECT('id', u.id ,'author' ,u.username) AS user,
-      (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', comment.id, 'content', comment.content)) FROM comment WHERE comment.moment_id = m.id) contents
-      FROM moment m LEFT JOIN user u ON m.user_id = u.id WHERE m.id = ?;`;
+    const statement = `SELECT m.id id, m.content content, 
+    JSON_OBJECT('id', u.id ,'author' ,u.username) AS user,
+    (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', comment.id, 'content', comment.content, 'user', JSON_OBJECT('id', user.id, 'name', user.username))) 
+    FROM comment LEFT JOIN user ON comment.user_id = user.id WHERE comment.moment_id = m.id) comments
+    FROM moment m LEFT JOIN user u ON m.user_id = u.id WHERE m.id = ?;`;
     const [result] = await pool.execute(statement, [momentId]);
     return result;
   }
