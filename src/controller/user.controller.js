@@ -1,5 +1,7 @@
 const { queryAvatarById } = require("../service/user.service");
 const fs = require("fs");
+const { resolve } = require("path");
+const { UPLOADS_PATH } = require("../config/path");
 
 class UserController {
   async create(ctx, next) {
@@ -16,12 +18,11 @@ class UserController {
     const id = ctx.params.id;
     const avatarInfo = await queryAvatarById(id);
     const { filename, mimetype } = avatarInfo;
-    console.log(filename, mimetype);
-    console.log(ctx.type);
-    // ctx.type = mimetype;
-    // ctx.body = fs.createReadStream(
-    //   `../../uploads/8ef82df662374642376d3fb3785bec35`
-    // );
+
+    ctx.type = mimetype;
+    ctx.body = fs.createReadStream(
+      resolve(__dirname, `../../${UPLOADS_PATH}/${filename}`)
+    );
   }
 }
 
