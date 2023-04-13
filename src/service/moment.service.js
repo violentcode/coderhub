@@ -35,6 +35,20 @@ class MomentService {
     const [result] = await pool.execute(statement, [momentId]);
     return result;
   }
+  // 判断关系表中是否有label
+  async isExistsLabel(momentId, labelId) {
+    const statement =
+      "SELECT * FROM moment_label WHERE moment_id = ? && label_id = ?;";
+    const [result] = await pool.execute(statement, [momentId, labelId]);
+    return !!result.length;
+  }
+  // 判断关系表中添加label
+  async addLabel(momentId, labelId) {
+    const statement =
+      "INSERT INTO moment_label (moment_id, label_id) VALUES (?, ?);";
+    const [result] = await pool.execute(statement, [momentId, labelId]);
+    return result;
+  }
 }
 
 module.exports = new MomentService();

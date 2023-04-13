@@ -4,6 +4,8 @@ const {
   detail,
   update,
   remove,
+  isExistsLabel,
+  addLabel,
 } = require("../service/moment.service");
 class MomentController {
   async create(ctx, next) {
@@ -34,9 +36,9 @@ class MomentController {
   }
 
   async update(ctx, next) {
-    const { id } = ctx.params;
+    const { momentId } = ctx.params;
     const { content } = ctx.request.body;
-    const data = await update(id, content);
+    const data = await update(momentId, content);
     ctx.body = {
       code: 0,
       message: "动态修改成功",
@@ -45,12 +47,27 @@ class MomentController {
   }
 
   async remove(ctx, next) {
-    const { id } = ctx.params;
-    const data = await remove(id);
+    const { momentId } = ctx.params;
+    const data = await remove(momentId);
     ctx.body = {
       code: 0,
       message: "动态删除成功",
       data,
+    };
+  }
+
+  async addLabels(ctx, next) {
+    const { momentId } = ctx.params;
+    const { labels } = ctx;
+    for (const label of labels) {
+      const result = await isExistsLabel(momentId, label.id);
+      if (!result) {
+        const result = await addLabel(momentId, label.id);
+      }
+    }
+    ctx.body = {
+      code: 0,
+      message: "添加标签成功",
     };
   }
 }

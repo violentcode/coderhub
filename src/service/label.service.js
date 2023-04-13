@@ -6,6 +6,12 @@ class LabelService {
     const [result] = await pool.execute(statement, [name]);
     return result;
   }
+
+  async queryLabelByName(name) {
+    const statement = "SELECT * FROM label WHERE name = ?";
+    const [result] = await pool.execute(statement, [name]);
+    return result[0];
+  }
 }
 
 module.exports = new LabelService();
