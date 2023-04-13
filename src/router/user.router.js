@@ -1,5 +1,5 @@
 const KoaRouter = require("@koa/router");
-const { create } = require("../controller/user.controller");
+const { create, queryAvatar } = require("../controller/user.controller");
 const {
   verification,
   handlePassword,
@@ -7,6 +7,10 @@ const {
 
 const userRouter = new KoaRouter({ prefix: "/user" });
 
+// 创建用户
 userRouter.post("/", verification, handlePassword, create);
+
+// 查询头像
+userRouter.get("/avatar/:id", queryAvatar);
 
 module.exports = userRouter;

@@ -12,6 +12,11 @@ class UserService {
     const [result] = await pool.execute(statement, [username]);
     return result;
   }
+  async queryAvatarById(id) {
+    const statement = "SELECT * FROM avatar WHERE user_id = ?";
+    const [result] = await pool.execute(statement, [id]);
+    return result[result.length - 1]; // 取出最新的头像
+  }
 }
 
 module.exports = new UserService();
